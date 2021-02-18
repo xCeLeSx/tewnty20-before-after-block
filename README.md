@@ -13,3 +13,5 @@ And upload files from catalog - **blocks**.
 
 At this moment we must place image ID manualy. 
 I'm working to implement MediaUpload function.
+
+Based on [php-block.js](https://gist.github.com/pento/cf38fd73ce0f13fcf0f0ae7d6c4b685d) by 

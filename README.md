@@ -4,12 +4,12 @@ First version of extensions to [Twenty20 Image Before-After](https://wordpress.o
 
 This extensions add block to Gutenberg Editor.
 
-To install it add in ttwenty.php below code:
+To install it add in end of file ttwenty.php below code:
 ```
 include_once('blocks/before-after-block.php');
 ```
 
 And upload files from catalog - **blocks**.
 
-At this moment we must place image ID manual.
+At this moment we must place image ID manualy. 
 I'm working to implement MediaUpload function.

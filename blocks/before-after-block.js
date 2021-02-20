@@ -1,13 +1,14 @@
-var el = wp.element.createElement,
+(function (blocks, editor, components, i18n, element) {
+
+	var el = wp.element.createElement,
 	registerBlockType = wp.blocks.registerBlockType,
 	ServerSideRender = wp.components.ServerSideRender,
 	TextControl = wp.components.TextControl,
-	ToggleControl = wp.components.ToggleControl,
 	RangeControl = wp.components.RangeControl,
 	SelectControl = wp.components.SelectControl,
 	InspectorControls = wp.editor.InspectorControls,
+	MediaUpload = wp.editor.MediaUpload,
 	PanelBody = wp.components.PanelBody;
-
 
 
 registerBlockType( 'twenty20/before-after-block', {
@@ -15,13 +16,25 @@ registerBlockType( 'twenty20/before-after-block', {
 	icon: 'image-flip-horizontal',
 	category: 'media',
 
-
 	edit: 
 	
 	function( props ) {
 		
+      var onSelectImage = function (media) {
+        return props.setAttributes({
+        	img1: media.id.toString(),
+			img1url: media.url
+        })
+      }
+	        var onSelectImage2 = function (media) {
+        return props.setAttributes({
+        	img2: media.id.toString(),
+			img2url: media.url
+        })
+      }
+		
 		return [
-
+			
 			el( ServerSideRender, {
 				block: 'twenty20/before-after-block',
 				attributes: props.attributes,
@@ -29,20 +42,40 @@ registerBlockType( 'twenty20/before-after-block', {
 
 			el( InspectorControls, {},
 			   el( PanelBody, { title: 'Images', initialOpen: true },
-				  el( TextControl, {
-					label: 'First Image',
-					value: props.attributes.img1,
-					onChange: ( value ) => { props.setAttributes( { img1: value } ); },
-				} ),
-			    el( TextControl, {
-					label: 'Second Image',
-					value: props.attributes.img2,
-					onChange: ( value ) => { props.setAttributes( { img2: value } ); },
-				} )),
-			el( PanelBody, { title: 'Settings', initialOpen: true },
+				  el('p', {}, __('First Image:')),
+          el(MediaUpload, {
+			onSelect: onSelectImage,
+              type: 'image',
+              render: function (obj) {
+                return el(wp.components.Button, {
+                  className: !props.attributes.img1 ? 'editor-post-featured-image__toggle' : 'editor-post-featured-image__preview',
+                  onClick: obj.open
+                },
+         		!props.attributes.img1 ?					
+    									el( 'span', {},
+    									    'Select image'
+    									): el('img', { src: props.attributes.img1url }))
+              }}),
+				  el('p', {}, __('Second Image:')),
+				  el(MediaUpload, {
+			onSelect: onSelectImage2,
+              type: 'image',
+              render: function (obj) {
+                return el(wp.components.Button, {
+                  className: !props.attributes.img2 ? 'editor-post-featured-image__toggle' : 'editor-post-featured-image__preview',
+                  onClick: obj.open
+                },
+         		!props.attributes.img2 ?			
+    									el( 'span', {},
+    									    'Select image'
+    									): el('img', { src: props.attributes.img2url }))
+              }
+            }),
+				 ),
+			el( PanelBody, { title: 'Display', initialOpen: true },
 			    el( SelectControl, {
 					label: 'Direction',
-												options : [
+					options : [
 					{ label: 'Horizontal', value: 'horizontal' },
 					{ label: 'Vertical', value: 'vertical' },
 				],
@@ -51,14 +84,15 @@ registerBlockType( 'twenty20/before-after-block', {
 				} ),
 			    el( RangeControl, {
 					label: 'Offset',
-					min: 0,
-					max: 10,
+					min: 0.0,
+					max: 1.0,
+					step: 0.1,
 					value: props.attributes.offset,
 					onChange: ( value ) => { props.setAttributes( { offset: value } ); },
 				} ),
 			    el( SelectControl, {
 					label: 'Align',
-								options : [
+					options : [
 					{ label: 'None', value: 'none' },
 					{ label: 'Left', value: 'left' },
 					{ label: 'Right', value: 'right' },
@@ -70,16 +104,20 @@ registerBlockType( 'twenty20/before-after-block', {
 					label: 'Width',
 					min: 1,
 					max: 100,
-					value: props.attributes.width,
-					onChange: ( value ) => {props.setAttributes( { width: value } );
+					value: parseInt(props.attributes.width.slice(0, -1)),
+					onChange: ( value ) => {props.setAttributes( { width: value + '%' } );
 				},
-				value: props.attributes.width,
-				} ),
-			  el( ToggleControl, {
+				} ),			   
+			   el( SelectControl, {
 					label: 'Hover',
+					options : [
+					{ label: 'True', value: 'true' },
+					{ label: 'False', value: 'false' },
+				],
+					value: props.attributes.hover,
 					onChange: ( value ) => { props.setAttributes( { hover: value } ); },
-				checked: props.attributes.hover,
-				} )),
+				} ),
+			   ),
 			   el( PanelBody, { title: 'Captions', initialOpen: true },
 			    el( TextControl, {
 					label: 'Before',
@@ -97,7 +135,7 @@ registerBlockType( 'twenty20/before-after-block', {
 	},
 
 	save: function(props) {
-		
-		return null
+		return null;
 	},
 } );
+} )();

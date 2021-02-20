@@ -19,5 +19,6 @@ v2.0
 * Added MediaUpload support,
 * Added preview of images,
 * Using builded shortcode, 
+
 v1.0
 * 1st version of extension.

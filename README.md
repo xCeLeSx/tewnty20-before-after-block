@@ -1,6 +1,6 @@
 # tewnty20-before-after-block
 
-First version of extension to [Twenty20 Image Before-After](https://wordpress.org/plugins/twenty20/) plugin by [Zayed Baloch](https://zayedbaloch.com/) for Wordpress.
+Extension to [Twenty20 Image Before-After](https://wordpress.org/plugins/twenty20/) plugin by [Zayed Baloch](https://zayedbaloch.com/) for Wordpress.
 
 This extensions add block to Gutenberg Editor.
 
